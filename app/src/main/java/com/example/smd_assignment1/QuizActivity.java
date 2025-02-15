@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class QuizActivity extends AppCompatActivity {
 
+    private LinearLayout opt1Wrapper, opt2Wrapper, opt3Wrapper, opt4Wrapper;
     private TextView questionText;
     private TextView option1Text, option2Text, option3Text, option4Text;
     private CheckBox option1, option2, option3, option4;
@@ -42,30 +44,9 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        questionText = findViewById(R.id.questionText);
-        option1Text = findViewById(R.id.option1Text);
-        option2Text = findViewById(R.id.option2Text);
-        option3Text = findViewById(R.id.option3Text);
-        option4Text = findViewById(R.id.option4Text);
-        option1 = findViewById(R.id.option1);
-        option2 = findViewById(R.id.option2);
-        option3 = findViewById(R.id.option3);
-        option4 = findViewById(R.id.option4);
-        nextButton = findViewById(R.id.nextButton);
+        init();
 
         loadQuestion();
-
-        View.OnClickListener checkBoxListener = view -> {
-            option1.setChecked(view == option1);
-            option2.setChecked(view == option2);
-            option3.setChecked(view == option3);
-            option4.setChecked(view == option4);
-        };
-
-        option1.setOnClickListener(checkBoxListener);
-        option2.setOnClickListener(checkBoxListener);
-        option3.setOnClickListener(checkBoxListener);
-        option4.setOnClickListener(checkBoxListener);
 
         nextButton.setOnClickListener(v -> {
             if (!option1.isChecked() && !option2.isChecked() && !option3.isChecked() && !option4.isChecked()) {
@@ -73,6 +54,7 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
             storeResult();
+            resetBackgrounds();
             if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
                 loadQuestion();
@@ -85,6 +67,37 @@ public class QuizActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void init () {
+        opt1Wrapper = findViewById(R.id.option1Wrapper);
+        opt2Wrapper = findViewById(R.id.option2Wrapper);
+        opt3Wrapper = findViewById(R.id.option3Wrapper);
+        opt4Wrapper = findViewById(R.id.option4Wrapper);
+
+        questionText = findViewById(R.id.questionText);
+        option1Text = findViewById(R.id.option1Text);
+        option2Text = findViewById(R.id.option2Text);
+        option3Text = findViewById(R.id.option3Text);
+        option4Text = findViewById(R.id.option4Text);
+        option1 = findViewById(R.id.option1);
+        option2 = findViewById(R.id.option2);
+        option3 = findViewById(R.id.option3);
+        option4 = findViewById(R.id.option4);
+        nextButton = findViewById(R.id.nextButton);
+
+        View.OnClickListener checkBoxListener = view -> {
+            option1.setChecked(view == option1);
+            option2.setChecked(view == option2);
+            option3.setChecked(view == option3);
+            option4.setChecked(view == option4);
+
+            changeBackgroundOfSelectedOption();
+        };
+
+        option1.setOnClickListener(checkBoxListener);
+        option2.setOnClickListener(checkBoxListener);
+        option3.setOnClickListener(checkBoxListener);
+        option4.setOnClickListener(checkBoxListener);
     }
     private void loadQuestion() {
         resetOptions();
@@ -123,5 +136,24 @@ public class QuizActivity extends AppCompatActivity {
             return answers[currentQuestionIndex][0].equals(option4Text.getText().toString());
         }
         return false;
+    }
+
+    private void resetBackgrounds() {
+        opt1Wrapper.setBackgroundResource(R.drawable.round_corner);
+        opt2Wrapper.setBackgroundResource(R.drawable.round_corner);
+        opt3Wrapper.setBackgroundResource(R.drawable.round_corner);
+        opt4Wrapper.setBackgroundResource(R.drawable.round_corner);
+    }
+    private void changeBackgroundOfSelectedOption() {
+        resetBackgrounds();
+        if (option1.isChecked()) {
+            opt1Wrapper.setBackgroundResource(R.drawable.selected_option);
+        } else if (option2.isChecked()) {
+            opt2Wrapper.setBackgroundResource(R.drawable.selected_option);
+        } else if (option3.isChecked()) {
+            opt3Wrapper.setBackgroundResource(R.drawable.selected_option);
+        } else if (option4.isChecked()) {
+            opt4Wrapper.setBackgroundResource(R.drawable.selected_option);
+        }
     }
 }
