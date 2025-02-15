@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">smd_assignment1</string>
+    <string name="title">Quiz Khelo</string>
+    <string name="enter_your_name">Enter Your Name</string>
+    <string name="your_name">Your Name</string>
+    <string name="btn_text_start">Start</string>
+    <string name="btn_text_play_again">Play Again</string>
+    <string name="tv_final_score">You scored 0 out of 0</string>
 </resources>
