@@ -1,5 +1,6 @@
 package com.example.smd_assignment1;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +17,7 @@ public class QuizActivity extends AppCompatActivity {
     private TextView questionText;
     private TextView option1Text, option2Text, option3Text, option4Text;
     private CheckBox option1, option2, option3, option4;
-    private Button nextButton;
+    private Button nextButton, prevButton;
 
     private int currentQuestionIndex = 0;
 
@@ -46,7 +47,7 @@ public class QuizActivity extends AppCompatActivity {
 
         init();
 
-        loadQuestion();
+        loadNextQuestion();
 
         nextButton.setOnClickListener(v -> {
             if (!option1.isChecked() && !option2.isChecked() && !option3.isChecked() && !option4.isChecked()) {
@@ -57,7 +58,7 @@ public class QuizActivity extends AppCompatActivity {
             resetBackgrounds();
             if (currentQuestionIndex < questions.length - 1) {
                 currentQuestionIndex++;
-                loadQuestion();
+                loadNextQuestion();
             } else {
                 Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
                 Toast.makeText(this, "Quiz Completed!", Toast.LENGTH_SHORT).show();
@@ -67,6 +68,19 @@ public class QuizActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        prevButton.setOnClickListener(v -> {
+            if (currentQuestionIndex > 0) {
+                if(isCorrect())
+                    score--;
+                currentQuestionIndex--;
+                loadPreviousQuestion();
+            }
+            else {
+                Toast.makeText(this, "First Question can;t go back!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
     public void init () {
         opt1Wrapper = findViewById(R.id.option1Wrapper);
@@ -84,6 +98,7 @@ public class QuizActivity extends AppCompatActivity {
         option3 = findViewById(R.id.option3);
         option4 = findViewById(R.id.option4);
         nextButton = findViewById(R.id.nextButton);
+        prevButton = findViewById(R.id.prevButton);
 
         View.OnClickListener checkBoxListener = view -> {
             option1.setChecked(view == option1);
@@ -99,11 +114,18 @@ public class QuizActivity extends AppCompatActivity {
         option3.setOnClickListener(checkBoxListener);
         option4.setOnClickListener(checkBoxListener);
     }
-    private void loadQuestion() {
+    @SuppressLint("SetTextI18n")
+    private void loadPreviousQuestion() {
+        loadNextQuestion();
+        nextButton.setText("Next");
+    }
+    private void loadNextQuestion() {
         resetOptions();
         fillInOptions();
         questionText.setText(questions[currentQuestionIndex]);
         nextButton.setText(currentQuestionIndex == questions.length - 1 ? "Finish" : "Next");
+        prevButton.setEnabled(currentQuestionIndex > 0);
+        prevButton.setVisibility(currentQuestionIndex == 0 ? View.INVISIBLE : View.VISIBLE);
     }
     private void fillInOptions() {
         option1Text.setText(options[currentQuestionIndex][0]);

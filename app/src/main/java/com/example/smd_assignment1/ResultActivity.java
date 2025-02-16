@@ -17,6 +17,7 @@ public class ResultActivity extends AppCompatActivity {
 
         TextView resultText = findViewById(R.id.resultText);
         Button playAgainButton = findViewById(R.id.playAgainButton);
+        Button shareButton = findViewById(R.id.shareButton);
 
         int score = getIntent().getIntExtra("score", 0);
         int total = getIntent().getIntExtra("total", 0);
@@ -27,6 +28,13 @@ public class ResultActivity extends AppCompatActivity {
             Intent intent = new Intent(ResultActivity.this, QuizActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        shareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, "I scored " + score + " out of " + total);
+            startActivity(Intent.createChooser(intent, "Share"));
         });
     }
 }

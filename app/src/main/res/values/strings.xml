@@ -7,4 +7,6 @@
     <string name="btn_text_play_again">Play Again</string>
     <string name="tv_final_score">You scored 0 out of 0</string>
     <string name="btn_quiz_next">Next</string>
+    <string name="btn_text_share">Share Score</string>
+    <string name="btn_text_previous">Previous</string>
 </resources>
